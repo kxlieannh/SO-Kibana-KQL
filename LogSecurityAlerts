@@ -4,7 +4,7 @@ event.code: "1102" and log_name: "Security"
 
 #Event 4625 - Admin Logins
 event.code: "4625" and winlog.event_data.TargetUserName: "Administrator" and host.name: "wks*"
-#Filters out noise under event id 4625 to specify wks. logins (admin logins)
+#Filters out noise under event id 4625 to specify (wks) or (Admin/Administrator) logins (admin logins)
 
 
 
