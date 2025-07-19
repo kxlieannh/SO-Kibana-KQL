@@ -1,10 +1,20 @@
 #Event 1102 - Security Log Cleared
 event.code: "1102" and log_name: "Security"
+
+#or, simpler version can be used
+
+event.code: "1102" and log_name: "Security"
 #Alerts Security logs being cleared via Event Viewer
 
 #Event 4625 - Admin Logins
 event.code: "4625" and winlog.event_data.TargetUserName: "Administrator" and host.name: "wks*"
 #Filters out noise under event id 4625 to specify (wks) or (Admin/Administrator) logins (admin logins)
+
+#more log monitoring options
+event.code: ("1102" or "104" or "517")
+#1102 - Security log cleared
+#104 - log file cleared
+#517 - Audit Log Cleared (older systems)
 
 
 
