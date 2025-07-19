@@ -40,3 +40,29 @@ These commands give the attacker:
 `process.command_line: ("*ipconfig*" or "*netstat*" or "*nslookup*" or "*route print*")`
 
 ## T1596 – Search Open Websites / Forums
+
+### Description: Recon through GitHub, forums, blogs — looking for credentials, misconfigs, and internal info. Elastic KQL detection is limited unless web logs or DNS logs show this.
+
+`event.code: "22" and winlog.event_data.QueryName: ("*pastebin.com*" or "*github.com*")`
+
+### Useful if:
+
+-Attacker visits known leak platforms
+-Malware pulls data from pastebin/GitHub
+
+## T1597 – Search Engines
+
+### Description: Attackers use Google, DuckDuckGo, Bing, etc., to find indexed pages and exposed systems.
+
+KQL (track browser queries to search engines):
+
+`event.code: "22" and winlog.event_data.QueryName: ("*google.com*" or "*bing.com*" or "*duckduckgo.com*")`
+
+For a stricter match on known dorks/searches:
+
+`url.full: ("*inurl:admin*" or "*intitle:index of*" or "*filetype:sql*")`
+
+Only works if you log full URLs from proxy/Zeek/Suricata
+
+
+
