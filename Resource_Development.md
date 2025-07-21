@@ -22,10 +22,20 @@ Renting VPS/cloud for staging or attack infrastructure.
 
 Acquire or self-sign TLS certs to add legitimacy to phishing/C2 sites.
 
-`event.dataset : "x509"
-| where not x509.issuer.common_name in ("DigiCert", "GlobalSign")`
+`event.dataset : "x509" | where not x509.issuer.common_name in ("DigiCert", "GlobalSign")`
 
 ## T1584 – Compromise Infrastructure
 
+Instead of buying resources, adversaries compromise existing infrastructure.
 
+### T1584.001 – Compromise Infrastructure: Domains
 
+Hijacked domains are used for phishing or malware delivery.
+
+ `dns.question.name : ("cdn.realcompany.com", "mail.spoofeddomain.org") | where url.path : "*login*" or "*update*"`
+
+### T1584.002 – Compromise Infrastructure: Servers
+
+Use of breached systems to serve payloads or proxy C2.
+
+`destination.ip in (known_compromised_webservers) | where network.protocol : "http" or "https"`
