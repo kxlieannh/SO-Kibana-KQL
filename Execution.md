@@ -98,34 +98,34 @@ Use of services.exe or sc.exe to execute code by starting a malicious service.
 
 `process.name: "psexec.exe" or process.command_line : "*\\\\*\\admin$*"`
 
-T1129 – Shared Modules
+## T1129 – Shared Modules
 
 Loading code via DLLs already present in shared folders or memory.
 
 `process.name : ("rundll32.exe", "dllhost.exe")
 | where file.path : ("C:\\Users\\*", "C:\\ProgramData\\*", "C:\\Temp\\*")`
 
-T1072 – Software Deployment Tools
+## T1072 – Software Deployment Tools
 
 Using SCCM, PDQ Deploy, or other tools to push and execute software.
 
 `process.name : ("PDQDeploy.exe", "PDQInventory.exe")
 | where process.command_line : ("*install*", "*deploy*")`
 
-T1204 – User Execution
+## T1204 – User Execution
 
 User is tricked into executing malicious code (e.g., clicking .lnk, .vbs, .exe in phishing email).
 
-T1204.002 – Malicious File Execution
+### T1204.002 – Malicious File Execution
 
 `file.extension : ("exe", "lnk", "vbs", "js", "scr")
 | where process.parent.name : ("explorer.exe", "outlook.exe")`
 
-T1559 – Inter-Process Communication
+## T1559 – Inter-Process Communication
 
 Adversaries use COM, named pipes, or Windows Messaging to execute code between processes.
 
-registry.path : "*\\CLSID\\*"
-| where registry.data.strings : ("*mshta.exe*", "*cmd.exe*", "*powershell*")
+`registry.path : "*\\CLSID\\*"
+| where registry.data.strings : ("*mshta.exe*", "*cmd.exe*", "*powershell*")`
 
 
