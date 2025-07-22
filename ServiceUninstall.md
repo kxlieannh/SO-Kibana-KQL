@@ -83,3 +83,6 @@ It should now successfully **reinstall cleanly** over the stubbed directory.
 
 ---
 
+  On setup use command
+
+  .\elastic-agent.exe install --url=https://url.ip --enrollment-token=< token here > --insecure
