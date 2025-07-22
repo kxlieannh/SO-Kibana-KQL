@@ -51,22 +51,79 @@ Watch for errors during known exploit paths (webshells, login brute force).
 | where url.path : ("/admin", "/login", "/phpmyadmin", "/wp-login.php") 
   and http.response.status_code == 500`
 
-##T1200 – Hardware Additions
+## T1200 – Hardware Additions
 
 Using rogue USBs, wireless adapters, or rogue devices.
 
 Detects USB device insertion. Especially useful with Sysmon or WinLogBeat.
 
-device.product : "*USB*" or device.name : "*Removable*"
-| where event.action : "connected"
+`device.product : "*USB*" or device.name : "*Removable*"
+| where event.action : "connected"`
 
 ## T1566 – Phishing
 
 Most common initial access method. Sub-techniques focus on method used.
 
+### T1566.001 – Spearphishing Attachment
 
+Weaponized Excel/Word files.
 
+Office spawning scripting tools = highly suspicious.
 
+`process.name : ("winword.exe", "excel.exe")
+| where process.command_line : ("powershell*", "*mshta*", "*cmd.exe*")`
 
+### T1566.002 – Spearphishing Link
 
+Link in email directs to credential harvester or malware.
 
+Catch access to spoofed login pages or phishing sites.
+
+`url.original : ("*login*", "*update*", "*sharepoint*", "*webmail*")
+| where url.domain matches regex ".*\.cf|.*\.tk|.*\.gq"`
+
+### T1566.003 – Spearphishing via Service
+
+Messages sent through Slack, Teams, LinkedIn, etc.
+
+Detects delivery of payloads via legitimate services.
+
+`network.protocol : "https" and url.domain : ("slack.com", "discordapp.com")
+| where url.path : ("*.exe", "*.zip")`
+
+## T1195 – Supply Chain Compromise
+
+Compromise through trusted third-party software or vendors.
+
+You’d tie this with threat intel or logs showing unexpected installer downloads.
+
+`process.name : ("setup.exe", "msiexec.exe")
+| where process.command_line : ("*.msi", "*.exe") and url.domain : ("updates.fakevendor.com")`
+
+## T1091 – Replication Through Removable Media
+
+Self-copying malware via USB.
+
+Detects executable files dropped to removable drives.
+
+`process.name : ("explorer.exe") and file.extension : ("exe", "lnk")
+| where file.path : ("E:\\*", "F:\\*", "G:\\*")`
+
+## T1189 – Drive-by Compromise
+
+Visiting a malicious site leads to background exploit.
+
+Detects download of potentially unwanted files by visiting a site.
+
+`url.original : "*"
+| where http.response.status_code == 200 and file.extension : ("exe", "js", "vbs", "hta")`
+
+## T1199 – Trusted Relationship
+
+Abuse of VPN/firewall access from a partner/vendor.
+
+Detect vendor logons during off-hours or unexpected times.
+
+`source.ip : * 
+| where source.ip in (trusted_vendor_ips)
+  and event.code : "4624"`
