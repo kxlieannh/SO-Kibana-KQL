@@ -1,4 +1,3 @@
-Thanks — now we’re getting to the root of it.
 
 ### ⚠️ Problem:
 
@@ -84,4 +83,3 @@ It should now successfully **reinstall cleanly** over the stubbed directory.
 
 ---
 
-Let me know if the `sc delete` still fails — I can give a SYSTEM-level bypass using no downloads.
